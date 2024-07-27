@@ -1,0 +1,59 @@
+html{
+    font-size: 62.5%;
+}
+
+body{
+    background-color:#FFFFFF;
+    color:#000000;
+    font-family: "Istok Web";
+    font-size: 1.6rem;
+    line-height:1.6em;
+    margin:0;
+}
+
+a{
+    color: #FFF;
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: underline;
+}
+a:visited{
+    color: #FFF;
+}
+
+
+.container{
+    width: 1120px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.main-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: uppercase;
+    background-color: #718276;
+    color: #E4D1C8;
+    z-index: 1000;
+}
+#main-title{
+    padding-left: 520px;
+}
+
+#main-navbar{
+    align-self: flex-end;
+    padding-right: 20px;
+}
+
+footer{
+    display: block;
+    background-color: #718276;
+    color: #E4D1C8;
+    text-align: center;
+}
+
+footer li{
+    list-style-image: url('../images/instalogobeige.png');
+}

@@ -1,0 +1,54 @@
+#hero-section{
+    background-image: url('../images/herobg.png');
+    background-size: 100% 100%;
+    height: 606px;
+}
+
+
+.hero-flex{
+    padding-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.icon-flex{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    padding-bottom: 0.5%;
+    padding-top: 5%;
+    padding-left: 6%;
+    padding-right: 2.5%;
+}
+
+#fridge-icon{
+    /*padding-left: 10px;*/
+}
+
+#titles{
+    list-style: none; 
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.section-title{
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 2.4rem;
+    background-color: #C04E59;
+    color: #FFF;
+    padding: 15px 25px;
+    border-radius: 5%;
+}
+
+.copy{
+    text-align: center;
+    font-size: 2.4rem;
+    line-height: 6rem;
+    display: block;
+    margin: 7%;
+}

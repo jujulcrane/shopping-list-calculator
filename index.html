@@ -3,25 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Istok Web' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <title>Shopping List Calculator</title>
 </head>
 <body>
-    <header class = "main-header">
-        <div class="container">
-            <h1>Shopping list calculator</h1>
-        </div>
-        <div class = "container">
-            <nav class = "navbar">
-                <img src="../shopping-list-calculator/images/Mask groupnavmenu.png" alt="burger menu">
-            </nav>
-        </div>
-    </header>
+        <header class = "main-header">
+            <div id = main-title>
+                <h1>Shopping list calculator</h1>
+            </div>
+            <div id = "main-navbar">
+                <nav class = "navbar">
+                    <img src="../shopping-list-calculator/images/Mask groupnavmenu.png" alt="burger menu">
+                </nav>
+            </div>
+        </header>
 
     <section id="hero-section">
-        <div class="container">
-            <ul>
+        <div class="container hero-flex">
+            <ul class = icon-flex>
                 <img src="../shopping-list-calculator/images/cookbookicon.png" alt="cook book icon">
-                <img src="../shopping-list-calculator/images/fridgeicon.png" alt="fridge icon">
+                <img id = "fridge-icon" src="../shopping-list-calculator/images/fridgeicon.png" alt="fridge icon">
                 <img src="../shopping-list-calculator/images/shoppingcarticon.png" alt="shopping cart icon">
             </ul>
             <ul id = "titles">
@@ -33,7 +36,7 @@
     </section>
 
     <div class="container">
-        <section id="copy">
+        <section class="copy">
             <p1>Optimize your shopping. Create automatic shopping lists based on ingredients in your cookbook and items already in your fridge.</p1>
         </section>
     </div>
