@@ -24,10 +24,6 @@
     padding-right: 2.5%;
 }
 
-#fridge-icon{
-    /*padding-left: 10px;*/
-}
-
 #titles{
     list-style: none; 
     display: flex;
@@ -35,20 +31,15 @@
     align-content: center;
 }
 
-.section-title{
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 2.4rem;
-    background-color: #C04E59;
-    color: #FFF;
-    padding: 15px 25px;
-    border-radius: 5%;
-}
+
 
 .copy{
-    text-align: center;
-    font-size: 2.4rem;
+    font-size: 3.2rem;
     line-height: 6rem;
     display: block;
-    margin: 7%;
+    margin: 7% auto;
+    width: 770px;
+    height: 159px;
+    text-align: center;
+    margin-top: 3%;
 }

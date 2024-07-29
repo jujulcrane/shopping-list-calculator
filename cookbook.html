@@ -3,31 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Istok Web' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="css/main.css">
-    <title>Shopping List Calculator</title>
+    <link rel="stylesheet" type="text/css" href="css/cookBook.css">
+    <title>Shopping List Calculator Cook Book</title>
 </head>
 <body>
     <header class = "main-header">
-        <div class="container">
+        <div id = main-title>
             <h1>Shopping list calculator</h1>
         </div>
-        <div class = "container">
-            <nav class = "navbar">
-                <img src="../shopping-list-calculator/images/Mask groupnavmenu.png" alt="burger menu">
-            </nav>
+        <div id = "burger-icon">
+            <button class = "navbutton">
+                <img id = "navImg" src="../shopping-list-calculator/images/Mask groupnavmenu.png" alt="burger menu">
+            </button>
         </div>
     </header>
+    <nav id="nav-block">
+        <ul id = links>
+            <li class = "link"> <a href="../shopping-list-calculator/index.html">Home</a></li>
+            <li class = "link"> <a href="../shopping-list-calculator/cookbook.html">Cook Book</a></li>
+            <li class = "link" ><a href="">Fridge</a></li>
+            <li class = "link"><a href="">Shopping List</a></li>
+        </ul>
+    </nav>
 
     <section id="cookbook-hero">
-        <img src="../shopping-list-calculator/images/redcookbook.png"
     </section>
 
-    <section>
-        <li class="section-title">Cook book</li>
-    </section>
+    <div class = "container cook-title">
+        <section>
+            <li class="section-title">Cook book</li>
+        </section>
+    </div>
 
     <div class="container">
-        <section id="recipe">
+        <section class ="recipe">
             <h1>Matcha Pancakes</h1>
             <h2>Ingredients (serves 1)</h2>
             <ul class = ingredients>
@@ -40,18 +51,64 @@
             </ul>
             <h2>Instructions</h2>
             <p1>Add ingredients to a blender of food processor. Blend until smooth and combined. Cook on oiled or buttered pan.</p1>
-            <li>Add to shopping cart</li>
+            <br>
+            <label class = "cont" for="addToShoppingCart">
+            <input type="checkbox" id="addToShoppingCart" name="addToShoppingCart" value="addToShoppingCart">
+            <span class="checkmark"></span>Add to shopping cart</label>
+            <button class="delete">Delete Recipe</button>
         </section>
     </div>
 
+    <div class = "container">
+        <form id = "create-recipe">
+            <h1>
+                Create New Recipe
+            </h1>
+            <label for "r-name">Name<br>
+            <input type="text" id="r-name"> 
+            </label>
+            <br>
+            <br>
+            <label for "servings">Servings<br>
+                <input type="text" id="servings">
+            </label>
+            <br>
+            <h2>
+                Ingredients
+            </h2>
+            <label for "addIng">Add Ingredient<br>
+                <input type="text" id="addIng">
+            </label>
+            <button id = "add">
+                ADD
+            </button>
+            <h2>Instructions</h2>
+            <label for "instructions">Instructions<br>
+                <textarea id="instructions" rows = "7" cols="50"></textarea>
+            </label>
+            <br>
+            <button type = "submit" id = "create">
+                CREATE RECIPE
+            </button>
+        </form>
+    </div>
+
+    <section id="your-recipes">
+        <h1>Your Recipes</h1>
+        <ul>
+            <li>Matcha Pancakes</li>
+            <li>Create New Recipe</li>
+        </ul>
+    </section>
+
     <footer>
-        <div class="container">
-            <p1>Created by Juliet Crane - 7/24/24</p1>
-            <li>jujulcrane@gmail.com</li>
+        <div class="container footer-flex">
+            <a href="https://www.instagram.com/jujulcrane/" target = "_blank"><img src="../shopping-list-calculator/images/InstagramIconCircle.png" alt="Instagram Link"></a>
+            <p1>Created by Juliet Crane - 7/24/24 <br> jujulcrane@gmail.com </p1>
+            <a href= "mailto: jujulcrane@gmail.com"><img src="../shopping-list-calculator/images/MailIcon (1).png" alt="Email Link"></a>
         </div>
     </footer>
 
-<body>
-    
+    <script src="../shopping-list-calculator/js/main.js"></script>
 </body>
 </html>
