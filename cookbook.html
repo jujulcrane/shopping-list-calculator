@@ -41,7 +41,7 @@
         <section class ="recipe">
             <h1>Matcha Pancakes</h1>
             <h2>Ingredients (serves 1)</h2>
-            <ul class = ingredients>
+            <ul class = "ingredients">
                 <li>2 teaspoons matcha powder</li>
                 <li>1/4 cup flour</li>
                 <li>1/2 teaspoon baking powder</li>
@@ -52,11 +52,15 @@
             <h2>Instructions</h2>
             <p1>Add ingredients to a blender of food processor. Blend until smooth and combined. Cook on oiled or buttered pan.</p1>
             <br>
-            <label class = "cont" for="addToShoppingCart">
-            <input type="checkbox" id="addToShoppingCart" name="addToShoppingCart" value="addToShoppingCart">
+            <label class = "cont" for="matcha-pancakes">
+            <input type="checkbox" id= "matcha-pancakes" name="addToShoppingCart" value="addToShoppingCart" onclick="addToCartFunction(this)">
             <span class="checkmark"></span>Add to shopping cart</label>
-            <button class="delete">Delete Recipe</button>
+            <button class="delete" onclick="deleteRecipe(this)">Delete Recipe</button>
         </section>
+    </div>
+    <div class = "container">
+        <div id="next-rec">
+        </div>
     </div>
 
     <div class = "container">
@@ -64,30 +68,32 @@
             <h1>
                 Create New Recipe
             </h1>
-            <label for "r-name">Name<br>
+            <label>Name<br>
             <input type="text" id="r-name"> 
             </label>
             <br>
             <br>
-            <label for "servings">Servings<br>
+            <label>Servings<br>
                 <input type="text" id="servings">
             </label>
             <br>
             <h2>
                 Ingredients
             </h2>
-            <label for "addIng">Add Ingredient<br>
+            <label>Add Ingredient<br>
+                <div id = "new-ings">
+                </div>
                 <input type="text" id="addIng">
             </label>
-            <button id = "add">
+            <button type = "button" id = "add">
                 ADD
             </button>
             <h2>Instructions</h2>
-            <label for "instructions">Instructions<br>
+            <label>Instructions<br>
                 <textarea id="instructions" rows = "7" cols="50"></textarea>
             </label>
             <br>
-            <button type = "submit" id = "create">
+            <button type = "button" id = "create">
                 CREATE RECIPE
             </button>
         </form>
@@ -95,9 +101,9 @@
 
     <section id="your-recipes">
         <h1>Your Recipes</h1>
-        <ul>
-            <li>Matcha Pancakes</li>
-            <li>Create New Recipe</li>
+        <ul id ="links-ul">
+            <li><a href="#matcha-pancakes">Matcha Pancakes</a></li>
+            <li><a href="#create-recipe">Create New Recipe</a></li>
         </ul>
     </section>
 
@@ -109,6 +115,7 @@
         </div>
     </footer>
 
+    <script src="../shopping-list-calculator/js/cookbook.js"></script>
     <script src="../shopping-list-calculator/js/main.js"></script>
 </body>
 </html>
