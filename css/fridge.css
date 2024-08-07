@@ -1,0 +1,129 @@
+#fridge-hero{
+    width: 100%;
+    height: 606px;
+    background-image: url('../images/fridge-hero\ \(1\).png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+input[type="text"] {
+    padding-left: 1%;
+}
+
+/* Style for the placeholder text */
+input[type="text"]::placeholder {
+    color: #000;
+    font-size: 1.6rem; /* Adjust the font size */
+}
+
+.fridge-title{
+    margin-top: 3%;
+    display: flex;
+    justify-content: center;
+}
+
+.section-title{
+    list-style: none; 
+    text-align: center;
+    width:fit-content;
+    margin-bottom: 7%;
+}
+
+.copy{
+    font-size: 2.4rem;
+    line-height: 6rem;
+    display: block;
+    margin: 3% auto;
+    text-align: center;
+}
+
+#virtual-fridge{
+    background-color: #E4D1C8;
+    color: white;
+    padding-top: 0.4%;
+    padding-bottom: 0.4%;
+    margin-bottom: 4%;
+}
+
+#labels{
+    background-color: #D3827E;
+    display: flex;
+    flex: 1;
+    padding: 1%;
+    box-sizing: border-box;
+    margin: 2%;
+    height: 6vh;
+    padding-top: 0;
+    line-height: 1rem;
+}
+
+#labels h1{
+    padding-left: 3%;
+    font-size: 2.4rem;
+    flex-grow: 0; /* Do not grow */
+    flex-shrink: 0; /* Do not shrink */
+    flex-basis: 41.5%; /* Take 50% of the container's width */
+    text-align: left; /* Align text to the left */
+
+}
+
+#labels h2{
+    font-size: 2.4rem;
+    flex-grow: 0; /* Do not grow */
+    flex-shrink: 0; /* Do not shrink */
+    flex-basis: 0%; /* Take 50% of the container's width */
+    text-align: center; /* Center the text within its 50% */
+
+}
+
+#shelves{
+    background-color: #99AB9E;
+    margin: 2%;
+}
+
+#shelves section{
+    display: flex;
+    justify-content: space-between;
+    background-color: #C0C5AF;
+    margin: 2%;
+    height: 5vh;
+    padding: 1%;
+}
+
+#shelves p1
+{
+    width: 10%;
+}
+
+#shelves button{
+    width: 10%;
+    border-radius: 5%;
+    color:#E4D1C8;
+}
+
+.remove{
+    background-color:#C04E59;
+}
+
+.add{
+    background-color: #718276;
+}
+
+#shelves input{
+    width: 20%;
+}
+
+#virtual-fridge ul
+{
+    list-style-type: none; /* Remove bullet points */
+    margin: 0; /* Remove margin from ul */
+    padding: 0; /* Remove padding from ul */
+}
+
+#virtual-fridge li{
+    list-style: none;
+    padding: 1%;
+    font-size: 2.0rem;
+    line-height: 4.6rem;
+}
