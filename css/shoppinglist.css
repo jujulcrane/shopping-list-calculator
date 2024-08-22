@@ -26,6 +26,7 @@
     list-style-type: none; /* Remove bullet points */
     margin: 0; /* Remove margin from ul */
     padding: 3%; /* Remove padding from ul */
+    margin-bottom: 3%;
 }
 
 .item{

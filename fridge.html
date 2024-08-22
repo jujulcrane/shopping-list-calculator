@@ -48,21 +48,30 @@
             <section id = "labels">
                 <h1>Item</h1>
                 <h2>Quantity</h2>
+                <h3>       </h3>
             </section>
             <div id = "shelves">
                 <ul>
                     <li>
-                        <section id ="milk">
+                        <!-- /*<section id ="milk">
                             <p1>Milk</p1>
                             <p1>12 cups</p1>
-                            <button class = "remove">REMOVE</button>
-                        </section>
+                            <button class = "remove" onClick = "removeItem(this.parentNode.id)">REMOVE</button>
+                        </section> !-->
                     </li>
-                    <li>
+                    <li id = "lastList">
                         <section id = "addForm">
                             <input type="text" id="add-item" placeholder="Add item...">
-                            <input type="text" id="add-quant" placeholder="Quantity...">
-                            <button class = "add">ADD</button>
+                            <input type="number" id="add-quant" placeholder="Quantity...">
+                            <select name="unit" id="units">
+                                <option value="cup">cup(s)</option>
+                                <option value="ml">ml</option>
+                                <option value="tbs">tbs</option>
+                                <option value="oz">oz</option>
+                                <option value="lbs">lbs</option>
+                                <option value="g">g</option>
+                              </select>
+                            <button class = "add" onClick = "storeItem()">ADD</button>
                         </section>
                     </li>
                 </ul>
@@ -80,6 +89,7 @@
         </div>
     </footer>
 
+    <script src="../shopping-list-calculator/js/fridge.js"></script>
     <script src="../shopping-list-calculator/js/main.js"></script>
 </body>
 </html>

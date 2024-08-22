@@ -158,6 +158,10 @@ input[type="text"], textarea {
     border-radius: 5%;
 }
 
+#add:hover{
+    background-color: #E4D1C8;
+}
+
 #create{
     font-size: 2.4rem;
     background-color:#718276;
@@ -165,6 +169,10 @@ input[type="text"], textarea {
     border: none;
     padding: 1.5%;
     border-radius: 5%;
+}
+
+#create:hover{
+    background-color: #E4D1C8;
 }
 
 #your-recipes{
@@ -200,4 +208,23 @@ input[type="text"], textarea {
     text-transform: uppercase;
     padding: 1.5%;
     border-radius: 5%;
+}
+
+.delete:hover{
+    background-color: #E4D1C8;
+}
+
+#addForm{
+    display: flex;
+    justify-content: space-between;
+}
+
+#addQuant{
+    background-color:#C0C5AF;
+    border-width: 0px 1px 0px 1px;
+}
+
+#units{
+    background-color: #C0C5AF;
+    border-width: 0px 1px 0px 1px;
 }

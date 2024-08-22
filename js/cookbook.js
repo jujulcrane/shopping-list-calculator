@@ -2,17 +2,16 @@ const newForm = document.querySelector('#create-recipe');
 const nameInput = document.querySelector('#r-name');
 const servingsInput = document.querySelector('#servings');
 const ingredientInput = document.querySelector('#addIng');
+const ingredientQuantInput = document.querySelector('#addQuant');
 const instructionsInput = document.querySelector('#instructions');
 const addBut = document.querySelector('#add');
 const submitBut = document.querySelector('#create');
+const unitsInput = document.querySelector('#units');
 let ingArr = [];
 const idArr = [];
 let numberOfRec = 0;
-const recipeMap = new Map([['matcha-pancakes', ['2 teaspoons matcha powder',
-'1/4 cup flour',
-'1/2 teaspoon baking powder',
-'1/2 cup cottage cheese',
-'1 tablespoon milk', '1 large egg']]]);
+let numberOfIng = 0;
+const recipeMap = new Map([['matcha-pancakes', [['matcha powder', 0.7, 'tbs'], ['flour', 0.25, 'cup'], ['baking powder', 0.17, 'tbs'], ['cottage cheese', 0.5, 'cup'], ['milk', 1, 'tbs'], ['egg', 50, 'g']]]]);
 
 function deleteLinks(href)
 {
@@ -61,14 +60,29 @@ function addLink(name, href)
 addBut.addEventListener("click", addIng);
 function addIng()
 {
-    ingArr.push(ingredientInput.value);
+    ingArr.push([ingredientInput.value, ingredientQuantInput.value, unitsInput.value]);
     console.log(ingArr);
-    document.getElementById('new-ings').insertAdjacentHTML("beforeend", '<li class ="idChild"> ' + ingredientInput.value + ' </li>');
+    document.getElementById('new-ings').insertAdjacentHTML("beforeend", '<li class ="idChild"> ' + ingredientQuantInput.value + " "+ unitsInput.value + " " + ingredientInput.value + ' </li>');
     ingredientInput.value = "";
+    ingredientQuantInput.value = "";
+    numberOfIng++;
 }
 
 function deleteRecipe(button)
 {
+    let element = button.previousElementSibling;
+    console.log("First previous sibling: ", element);
+    
+    element = element.querySelector('input[type="checkbox"]');
+    console.log("input of that: ", element);
+    
+    if (element && element.tagName === 'INPUT') {
+        console.log("The input element: ", element);
+        console.log("ID to delete: ", element.id);
+    } else {
+        console.error("Input element not found or incorrect DOM structure.");
+    }
+    // debugging
     const recipeToDelete = button.closest('section');
     recipeToDelete.remove();
     const firstCheckBox = recipeToDelete.querySelector('input[type="checkbox"]');
@@ -78,80 +92,231 @@ function deleteRecipe(button)
         // Log the href value
         console.log("href= " + `#${firstCheckBox.id}`);
         deleteLinks(`#${(firstCheckBox.id)}`);
+        if (firstCheckBox.checked)
+        {
+            console.log("deleting stored ingredients");
+            localStorage.removeItem(`checkbox-${firstCheckBox.id}`);
+            //removing checkbox true false thing
+            storeEachIngredient(firstCheckBox.id, false);
+            //remove ing added to cart
+        }
     }
      else 
     {
         console.log("No checkbox or checkbox ID found in the section.");
     }
+
+    deleteRecipeFromLocalStorage(firstCheckBox.id);
+    console.log( "successfully removed from map: "+ recipeMap.delete(element.id));
+
+    //remove checkbox from storadge
+    // save the recipe being removed to be removed from html
+    // storeEachIngredient(key, shouldStore)--> if false, removes array of ingredients for key from recipeMap
+    //addToCartFunction(unchecked) -->removes items from shopping car/ storage
+    //saveRecipeToLocalStorage(recipe) --> adds new recpie to list of stored recepies (recipe is an obj with var id and arr ings)
+    //loadRecipesFromLocalStorage() --> populates recipie map, "renders the recipe" (adds its html)
+    //onload --> loadRecipesFromLocalStorage();
+// --> checks each checkbox and if its stored state is true, checks and restores if true, unchecks if false
 }
 
-function addToCartFunction(button)
+function storeEachIngredient(key, shouldStore) 
 {
-    console.log ('#' + button.id);
-     const addCheck = document.querySelector('#' + button.id);      
-    if (addCheck.checked == true)
+    const arrOfIngs = recipeMap.get(key);
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    if (!arrOfIngs) 
     {
-        console.log(`added ${recipeMap.get(button.id)} to shopping cart`);
+        console.error(`No ingredients found for the given key: ${key}`);
+        return;
     }
+
+    arrOfIngs.forEach(arr => 
+    {
+        const [ingKey, ingValue1, ingValue2] = arr;
+
+        if (shouldStore) 
+        {
+            cart.push([ingKey, ingValue1, ingValue2]);
+            localStorage.setItem('cart', JSON.stringify(cart));
+        } 
+        else 
+        {
+            deleteIngsFromCart(ingKey);
+        }
+    });
+}
+
+function deleteIngsFromCart(ingKey)
+{
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let len = cart.length;
+    let newCart = [];
+    for (let i = 0; i < len; i++)
+            {
+                if (cart[i][0] == ingKey)
+                {
+                    //don't add
+                }
+                else
+                {
+                    newCart.push(cart[i]);
+                }
+            }
+            localStorage.setItem('cart', JSON.stringify(newCart));
+}
+
+function addToCartFunction(checkbox)
+{
+     const isChecked = checkbox.checked;
+     const recipeKey = checkbox.id;
+     
+     localStorage.setItem(`checkbox-${recipeKey}`, isChecked);
+
+      if (isChecked) 
+      {
+        console.log(`Added ${recipeMap.get(recipeKey)} to shopping cart`);
+        storeEachIngredient(recipeKey, true);
+     } 
+     else 
+     {
+        console.log(`Removed ${recipeMap.get(recipeKey)} from shopping cart`);
+        storeEachIngredient(recipeKey, false);
+      }
 }
 
 
 submitBut.addEventListener('click', onSubmit);
 
-function onSubmit(e)
+function generateIngList(arr)
 {
-    e.preventDefault();
-    idArr[numberOfRec] = getFirstWord(nameInput.value);
-    recipeMap.set(idArr[numberOfRec], ingArr.slice());
-    for (let entries of recipeMap.entries())
+    let html = "";
+    for (let array of arr)
     {
-        console.log("entry: "+ entries);
+        console.log(`adding : <li> ${array[1]} ${array[2]} ${array[0]} </li>`);
+        html += `<li> ${array[1]} ${array[2]} ${array[0]} </li>`;
     }
-    console.log(idArr[numberOfRec]);
-    let ingList = "";
-    for (let ing of ingArr)
+    return html;
+}
+
+function deleteRecipeFromLocalStorage(theId)
+{
+    const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+    let len = recipes.length;
+    let newRecipes = [];
+    for (let i = 0; i < len; i++)
     {
-        ingList += `<li>${ing}</li>`;
+        if (recipes[i].id == theId)
+        {
+            console.log(`did not add ${theId}`);
+        }
+        else
+        {
+            newRecipes.push(recipes[i]);
+        }
     }
+    localStorage.setItem('recipes', JSON.stringify(newRecipes));
+}
+
+//Store recipes in localStorage
+function saveRecipeToLocalStorage(recipe) 
+{
+    let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+    recipes.push(recipe);
+    localStorage.setItem('recipes', JSON.stringify(recipes));
+}
+
+// Retrieve and render recipes from localStorage on page load
+function loadRecipesFromLocalStorage() 
+{
+    const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+    recipes.forEach(recipe => {
+        // Populate the recipeMap
+        recipeMap.set(recipe.id, recipe.ingredients);
+        // Render the recipe
+        renderRecipe(recipe);
+    });
+}
+
+function renderRecipe(recipe) {
+    const { id, name, servings, ingredients, instructions } = recipe;
     document.getElementById('next-rec').insertAdjacentHTML("beforeend", `
     <div class="container">
         <section class="recipe">
-            <h1>${document.querySelector('#r-name').value}</h1>
-            <h2>Ingredients (serves ${servingsInput.value})</h2>
+            <h1>${name}</h1>
+            <h2>Ingredients (serves ${servings})</h2>
             <ul class="ingredients">
-                ${ingList}
+                ${generateIngList(ingredients)}
             </ul>
             <h2>Instructions</h2>
-            <p>${document.querySelector('#instructions').value}</p>
+            <p>${instructions}</p>
             <br>
-            <label class="cont" for="${idArr[numberOfRec]}">
-                <input type="checkbox" id ='${idArr[numberOfRec]}' name="addToShoppingCart" value="addToShoppingCart" onclick="addToCartFunction(this)">
+            <label class="cont" for="${id}">
+                <input type="checkbox" id ='${id}' name="addToShoppingCart" value="addToShoppingCart" onclick="addToCartFunction(this)">
                 <span class="checkmark"></span>Add to shopping cart</label>
             <button class="delete" onclick="deleteRecipe(this)">Delete Recipe</button>
         </section>
     </div>
-    <div class="container">
-        <div id="next-rec"></div>
-    </div>
     `);
-    addLink(nameInput.value, idArr[numberOfRec]);
+}
+
+function onSubmit(e)
+{
+    e.preventDefault();
+    let iD = getFirstWord(nameInput.value);
+    recipeMap.set(getFirstWord(nameInput.value), ingArr.slice());
+    for (let entries of recipeMap.entries())
+    {
+        console.log("entry: "+ entries);
+    }
+    const recipe = {
+        id: iD,
+        name: document.querySelector('#r-name').value,
+        servings: servingsInput.value,
+        ingredients: ingArr.slice(),
+        instructions: document.querySelector('#instructions').value
+    };
+
+     // Save the recipe to localStorage
+     saveRecipeToLocalStorage(recipe);
+
+     // Render the recipe
+     renderRecipe(recipe);
+
+    addLink(nameInput.value, iD);
+
+    //reset form
     document.querySelector('#r-name').value = "";
     servingsInput.value = "";
     ingArr = [];
+    numberOfIng = 0;
     document.querySelector('#instructions').value = "";
+    
+    //remove ingredients from the form
     let lists = document.getElementsByClassName("idChild");
-    if (lists.length != 0)
-    {
-            for (let ing of lists)
-        {
-            console.log("removing " + ing);
-            ing.remove();
-        }
-    }
-    if (lists.length != 0)
-    {
+    while (lists.length > 0) {
         lists[0].remove();
     }
-    numberOfRec++;
 }
+
+window.onload = function() 
+{
+    loadRecipesFromLocalStorage();
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    checkboxes.forEach(checkbox => 
+    {
+        const recipeKey = checkbox.id;
+        const storedState = localStorage.getItem(`checkbox-${recipeKey}`);
+
+        if (storedState === 'true') 
+        {
+            checkbox.checked = true;
+            storeEachIngredient(recipeKey, true);  // restore the ingredients
+        } 
+        else 
+        {
+            checkbox.checked = false;
+        }
+    });
+};
 

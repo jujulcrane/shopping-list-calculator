@@ -53,8 +53,8 @@
             <p1>Add ingredients to a blender of food processor. Blend until smooth and combined. Cook on oiled or buttered pan.</p1>
             <br>
             <label class = "cont" for="matcha-pancakes">
-            <input type="checkbox" id= "matcha-pancakes" name="addToShoppingCart" value="addToShoppingCart" onclick="addToCartFunction(this)">
-            <span class="checkmark"></span>Add to shopping cart</label>
+                <input type="checkbox" id= "matcha-pancakes" name="addToShoppingCart" value="addToShoppingCart" onclick="addToCartFunction(this)">
+                <span class="checkmark"></span>Add to shopping cart</label>
             <button class="delete" onclick="deleteRecipe(this)">Delete Recipe</button>
         </section>
     </div>
@@ -83,7 +83,18 @@
             <label>Add Ingredient<br>
                 <div id = "new-ings">
                 </div>
-                <input type="text" id="addIng">
+                <div id="addForm">
+                    <input type="text" id="addIng" placeholder="Ingredient...">
+                    <input type="number" id="addQuant" placeholder="Quantity...">
+                    <select name="unit" id="units">
+                        <option value="cup">cup(s)</option>
+                        <option value="ml">ml</option>
+                        <option value="tbs">tbs</option>
+                        <option value="oz">oz</option>
+                        <option value="lbs">lbs</option>
+                        <option value="g">g</option>
+                      </select>
+                </div>
             </label>
             <button type = "button" id = "add">
                 ADD
