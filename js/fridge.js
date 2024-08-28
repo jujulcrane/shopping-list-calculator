@@ -1,6 +1,4 @@
-let items = [];
-const itemMap = new Map();
-let numOfItems = 0;
+
 const itemInput = document.querySelector('#add-item');
 const quantInput = document.querySelector('#add-quant');
 const addBut = document.querySelector('.add');
@@ -20,52 +18,127 @@ function getFirstWord(inputString) {
 function removeItem(id)
 {
     const element = document.getElementById(id);
-    if (element) {
+    let itemToRemove = [];
+    if (element) 
+    {
         element.remove();
         console.log(`Element with id "${id}" removed.`);
-    } else {
+    } 
+    else 
+    {
         console.error(`Element with id "${id}" not found.`);
     }
-    //document.getElementById(id).remove();
-    itemMap.delete('key2');
-    numOfItems--;
-    let indexToDelete = -1;
-    for (let i = 0; i < items.length; i++)
+    let items = JSON.parse(localStorage.getItem('items')) || [];
+    let len = items.length;
+    let newItems = [];
+    for (let i = 0; i < len; i++)
     {
-        if (items[i][0].includes(id))
+        console.log(`does ${getFirstWord(items[i][0])} equal ${id}: ${getFirstWord(items[i][0]) == id}`);
+        if (getFirstWord(items[i][0]) == id)
         {
-            indexToDelete = i;
-            console.log(indexToDelete);
-        }
-    }
-    if (indexToDelete == -1)
-    {
-        console.log("ERROR could not delete");
-    }
-    else
-    {
-        if (indexToDelete == items.length -1)
-        {
-            items = items.slice(0,indexToDelete);
+            itemToRemove = items[i];
         }
         else
         {
-            items = items.slice(0,indexToDelete).concat(items.slice(indexToDelete + 1));
+            newItems.push(items[i]);
         }
     }
-    console.log("new items array = " + items);
+    localStorage.setItem('items', JSON.stringify(newItems));
+    updateCart();
 }
 
 function storeItem() 
 {
-    items[numOfItems] = [itemInput.value, quantInput.value];
-    numOfItems++;
-    console.log(items);
-    itemMap.set(getFirstWord(itemInput.value), [itemInput.value, quantInput.value]);
-    console.log(itemMap);
     displayItem(itemInput.value, quantInput.value, unitsInput.value);
+    //convert quant to grams
+    let convertedQuant = convertToGrams(unitsInput.value, quantInput.value)
+    saveItemToLocalStorage([itemInput.value, convertedQuant, "g"]);
+    updateCart();
     itemInput.value ="";
     quantInput.value="";
+}
+
+function convertToGrams(unit, quant) 
+{
+    switch(unit) 
+    {
+        case 'oz':
+            return quant * 28.35;
+        case 'lbs':
+            return quant * 453.6;
+        case 'g':
+            return quant;
+        default:
+            console.error('Unknown unit:', unit);
+            return null; 
+    }
+}
+
+function updateCart()
+{
+    //check if items contains any needs
+    // add needs - items to cart
+    let needs = JSON.parse(localStorage.getItem('needs')) || [];
+    let items = JSON.parse(localStorage.getItem('items')) || [];
+    let newCart = [];
+    if (items.length!= 0)
+    {
+    items.forEach(arr => 
+        {
+            const [name, quant, unit] = arr;
+            needs.forEach(item =>
+                {
+                    let [cartName, cartQuant, cartUnit] = item;
+                    if (cartName == name)
+                    {
+                        if (unit != cartUnit)
+                        {
+                            console.error("wrong units");
+                        }
+                        cartQuant -= quant;
+                        if (cartQuant <= 0)
+                        {
+                            //don't add
+                        }
+                        else
+                        {
+                            newCart.push([cartName, cartQuant, cartUnit])
+                        }
+                    }
+                    else
+                    {
+                        newCart.push([cartName, cartQuant, cartUnit])
+                    }
+                })
+        })
+    }
+    else
+    {
+        needs.forEach(item =>
+            {
+                newCart.push(item);
+            })
+    }
+    console.log("updating cart");
+    localStorage.setItem('cart', JSON.stringify(newCart));
+}
+
+function saveItemToLocalStorage(item) 
+{
+    let items = JSON.parse(localStorage.getItem('items')) || [];
+    items.push(item);
+    localStorage.setItem('items', JSON.stringify(items));
+}
+
+// Retrieve and render recipes from localStorage on page load
+function loadItemsFromLocalStorage() 
+{
+    const items = JSON.parse(localStorage.getItem('items')) || [];
+    items.forEach(item => {
+        // Populate the itemMap?
+        // Render the item
+        displayItem(item[0],item[1],item[2]);
+    });
 }
 
 function displayItem(item, quantity, unit)
@@ -79,3 +152,8 @@ function displayItem(item, quantity, unit)
     </section>
 </li>`);
 }
+
+window.onload = function() 
+{
+    loadItemsFromLocalStorage();
+};

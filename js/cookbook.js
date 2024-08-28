@@ -11,7 +11,7 @@ let ingArr = [];
 const idArr = [];
 let numberOfRec = 0;
 let numberOfIng = 0;
-const recipeMap = new Map([['matcha-pancakes', [['matcha powder', 0.7, 'tbs'], ['flour', 0.25, 'cup'], ['baking powder', 0.17, 'tbs'], ['cottage cheese', 0.5, 'cup'], ['milk', 1, 'tbs'], ['egg', 50, 'g']]]]);
+const recipeMap = new Map([['matcha-pancakes', [['matcha powder', 0.7, 'g'], ['flour', 30, 'g'], ['baking powder', 2.4, 'g'], ['cottage cheese', 113, 'g'], ['milk', 15, 'g'], ['egg', 50, 'g']]]]);
 
 function deleteLinks(href)
 {
@@ -33,15 +33,76 @@ function deleteLinks(href)
         });
 }
 
-function getFirstWord(inputString) {
-    // Trim the string to remove any leading or trailing whitespace
-    var trimmedString = inputString.trim();
-    
-    // Split the string by spaces
-    var words = trimmedString.split(" ");
-    
-    // Return the first word
+function getFirstWord(inputString) 
+{
+    let trimmedString = inputString.trim();
+    let words = trimmedString.split(" ");
     return words[0];
+}
+
+function updateCart()
+{
+    //check if items contains any needs
+    // add needs - items to cart
+    let needs = JSON.parse(localStorage.getItem('needs')) || [];
+    let items = JSON.parse(localStorage.getItem('items')) || [];
+    let newCart = [];
+    if (items.length!= 0)
+    {
+    items.forEach(arr => 
+        {
+            const [name, quant, unit] = arr;
+            needs.forEach(item =>
+                {
+                    let [cartName, cartQuant, cartUnit] = item;
+                    if (cartName == name)
+                    {
+                        if (unit != cartUnit)
+                        {
+                            console.error("wrong units");
+                        }
+                        cartQuant -= quant;
+                        if (cartQuant <= 0)
+                        {
+                            //don't add
+                        }
+                        else
+                        {
+                            newCart.push([cartName, cartQuant, cartUnit])
+                        }
+                    }
+                    else
+                    {
+                        newCart.push([cartName, cartQuant, cartUnit])
+                    }
+                })
+        })
+    }
+    else
+    {
+        needs.forEach(item =>
+            {
+                newCart.push(item);
+            })
+    }
+    console.log("updating cart");
+    localStorage.setItem('cart', JSON.stringify(newCart));
+}
+
+function convertToGrams(unit, quant) 
+{
+    switch(unit) 
+    {
+        case 'oz':
+            return quant * 28.35;
+        case 'lbs':
+            return quant * 453.6;
+        case 'g':
+            return quant;
+        default:
+            console.error('Unknown unit:', unit);
+            return null; 
+    }
 }
 
 function addLink(name, href)
@@ -122,7 +183,7 @@ function deleteRecipe(button)
 function storeEachIngredient(key, shouldStore) 
 {
     const arrOfIngs = recipeMap.get(key);
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const needs = JSON.parse(localStorage.getItem('needs')) || [];
     
     if (!arrOfIngs) 
     {
@@ -132,37 +193,53 @@ function storeEachIngredient(key, shouldStore)
 
     arrOfIngs.forEach(arr => 
     {
-        const [ingKey, ingValue1, ingValue2] = arr;
-
+        let added = false;
+        const [ingKey, quant, unit] = arr;
         if (shouldStore) 
         {
-            cart.push([ingKey, ingValue1, ingValue2]);
-            localStorage.setItem('cart', JSON.stringify(cart));
+            const quantAsNumber = parseFloat(quant);
+            let newQuant = convertToGrams(unit, quantAsNumber);
+            for (let i = 0; i < needs.length; i++)
+            {
+                if (needs[i][0] == ingKey)
+                {
+                    needs[i][1] += newQuant;
+                    added = true;
+                    //figure out how to subtract if remove from cart
+                    break;
+                }
+            }
+            if (!added)
+            {
+                needs.push([ingKey, newQuant, "g"]);
+            }
+            localStorage.setItem('needs', JSON.stringify(needs));
         } 
         else 
         {
-            deleteIngsFromCart(ingKey);
+            deleteIngsFromNeeds(ingKey);
         }
     });
+    updateCart();
 }
 
-function deleteIngsFromCart(ingKey)
+function deleteIngsFromNeeds(ingKey)
 {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let len = cart.length;
-    let newCart = [];
+    const needs = JSON.parse(localStorage.getItem('needs')) || [];
+    let len = needs.length;
+    let newNeeds = [];
     for (let i = 0; i < len; i++)
             {
-                if (cart[i][0] == ingKey)
+                if (needs[i][0] == ingKey)
                 {
                     //don't add
                 }
                 else
                 {
-                    newCart.push(cart[i]);
+                    newNeeds.push(needs[i]);
                 }
             }
-            localStorage.setItem('cart', JSON.stringify(newCart));
+            localStorage.setItem('needs', JSON.stringify(newNeeds));
 }
 
 function addToCartFunction(checkbox)
@@ -181,7 +258,7 @@ function addToCartFunction(checkbox)
      {
         console.log(`Removed ${recipeMap.get(recipeKey)} from shopping cart`);
         storeEachIngredient(recipeKey, false);
-      }
+        }
 }
 
 
