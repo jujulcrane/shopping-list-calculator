@@ -388,7 +388,7 @@ window.onload = function()
         if (storedState === 'true') 
         {
             checkbox.checked = true;
-            storeEachIngredient(recipeKey, true);  // restore the ingredients
+           // storeEachIngredient(recipeKey, true);  // restore the ingredients
         } 
         else 
         {
