@@ -94,11 +94,11 @@ function convertToGrams(unit, quant)
     switch(unit) 
     {
         case 'oz':
-            return quant * 28.35;
+            return Math.round(quant * 28.35);
         case 'lbs':
-            return quant * 453.6;
+            return Math.round(quant * 453.6);
         case 'g':
-            return quant;
+            return Math.round(quant);
         default:
             console.error('Unknown unit:', unit);
             return null; 
@@ -191,10 +191,12 @@ function storeEachIngredient(key, shouldStore)
         return;
     }
 
+    console.log('key is: ' + key)
+
     arrOfIngs.forEach(arr => 
     {
         let added = false;
-        const [ingKey, quant, unit] = arr;
+        const [ingKey, quant, unit, key] = arr;
         if (shouldStore) 
         {
             const quantAsNumber = parseFloat(quant);
@@ -211,26 +213,26 @@ function storeEachIngredient(key, shouldStore)
             }
             if (!added)
             {
-                needs.push([ingKey, newQuant, "g"]);
+                needs.push([ingKey, newQuant, "g", key]);
             }
             localStorage.setItem('needs', JSON.stringify(needs));
         } 
         else 
         {
-            deleteIngsFromNeeds(ingKey);
+            deleteIngsFromNeeds(ingKey, key);
         }
     });
     updateCart();
 }
 
-function deleteIngsFromNeeds(ingKey)
+function deleteIngsFromNeeds(ingKey, key)
 {
     const needs = JSON.parse(localStorage.getItem('needs')) || [];
     let len = needs.length;
     let newNeeds = [];
     for (let i = 0; i < len; i++)
             {
-                if (needs[i][0] == ingKey)
+                if (needs[i][0] == ingKey && needs[i][3] == key) //need more info so doesnt delete all w name
                 {
                     //don't add
                 }
@@ -240,6 +242,7 @@ function deleteIngsFromNeeds(ingKey)
                 }
             }
             localStorage.setItem('needs', JSON.stringify(newNeeds));
+            //check to see if another recipie contains same key
 }
 
 function addToCartFunction(checkbox)

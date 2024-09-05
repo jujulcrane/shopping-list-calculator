@@ -63,11 +63,11 @@ function convertToGrams(unit, quant)
     switch(unit) 
     {
         case 'oz':
-            return quant * 28.35;
+            return Math.round(quant * 28.35);
         case 'lbs':
-            return quant * 453.6;
+            return Math.round(quant * 453.6);
         case 'g':
-            return quant;
+            return Math.round(quant);
         default:
             console.error('Unknown unit:', unit);
             return null; 
