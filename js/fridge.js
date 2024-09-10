@@ -53,10 +53,39 @@ function storeItem()
     //convert quant to grams
     let convertedQuant = convertToGrams(unitsInput.value, quantInput.value)
     saveItemToLocalStorage([itemInput.value, convertedQuant, "g"]);
-    updateCart();
+    updateCartWithStoredItem(itemInput.value, convertedQuant);
     itemInput.value ="";
     quantInput.value="";
 }
+
+function updateCartWithStoredItem(itemName, quantity) 
+{
+    let needs = JSON.parse(localStorage.getItem('needs')) || [];
+    let newCart = [];
+    
+    // Loop through the current cart (needs) to adjust quantities
+    needs.forEach((item) => {
+        let [cartName, cartQuant, cartUnit, key] = item;
+        
+        // If the item from the fridge matches the cart item
+        if (cartName === itemName) {
+            cartQuant -= quantity; // Subtract the stored quantity
+            
+            if (cartQuant > 0) {
+                // If there's still some quantity needed, add to newCart
+                newCart.push([cartName, cartQuant, cartUnit, key]);
+            }
+        } else {
+            // If it doesn't match, keep the item in the cart
+            newCart.push([cartName, cartQuant, cartUnit, key]);
+        }
+    });
+        // Save the updated cart back to localStorage
+        localStorage.setItem('cart', JSON.stringify(newCart));
+    
+        console.log("Cart updated after storing item in fridge.");
+ }
+    
 
 function convertToGrams(unit, quant) 
 {
@@ -85,39 +114,36 @@ function updateCart()
     {
     items.forEach(arr => 
         {
-            const [name, quant, unit] = arr;
+            const [name, fridgeQuant, firdgeUnit] = arr;
             needs.forEach(item =>
                 {
-                    let [cartName, cartQuant, cartUnit] = item;
-                    if (cartName == name)
+                    let [cartName, cartQuant, cartUnit, key] = item;
+                    if (cartName === name)
                     {
-                        if (unit != cartUnit)
+                        if (cartUnit !== firdgeUnit)
                         {
                             console.error("wrong units");
                         }
-                        cartQuant -= quant;
+                        cartQuant -= fridgeQuant;
                         if (cartQuant <= 0)
                         {
                             //don't add
                         }
                         else
                         {
-                            newCart.push([cartName, cartQuant, cartUnit])
+                            newCart.push([cartName, cartQuant, cartUnit, key])
                         }
                     }
                     else
                     {
-                        newCart.push([cartName, cartQuant, cartUnit])
+                        newCart.push([cartName, cartQuant, cartUnit, key])
                     }
                 })
         })
     }
     else
     {
-        needs.forEach(item =>
-            {
-                newCart.push(item);
-            })
+        newCart = needs
     }
     console.log("updating cart");
     localStorage.setItem('cart', JSON.stringify(newCart));

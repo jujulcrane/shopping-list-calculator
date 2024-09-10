@@ -51,39 +51,42 @@ function updateCart()
     {
     items.forEach(arr => 
         {
-            const [name, quant, unit] = arr;
+            const [name, fridgeQuant, firdgeUnit] = arr;
             needs.forEach(item =>
                 {
-                    let [cartName, cartQuant, cartUnit] = item;
-                    if (cartName == name)
+                    let [cartName, cartQuant, cartUnit, key] = item;
+                    
+                    console.log('checking if' + cartName + " == " + name);
+                    if (cartName === name)
                     {
-                        if (unit != cartUnit)
+                        if (cartUnit !== firdgeUnit)
                         {
                             console.error("wrong units");
                         }
-                        cartQuant -= quant;
+                        cartQuant -= fridgeQuant;
                         if (cartQuant <= 0)
                         {
                             //don't add
                         }
                         else
                         {
-                            newCart.push([cartName, cartQuant, cartUnit])
+                            newCart.push([cartName, cartQuant, cartUnit, key]);
+                        
+                            console.log('pushed' + [cartName, cartQuant, cartUnit, key] + 'to cart');
                         }
                     }
                     else
                     {
-                        newCart.push([cartName, cartQuant, cartUnit])
+                       newCart.push([cartName,  cartQuant, cartUnit, key])
+                        console.log('pushed' + [cartName, cartQuant, cartUnit, key] + 'to cart');
+                        //currently issue where it is adding ingredient twice bc it is adding it first when tea = flour and then again when flour=flour
                     }
                 })
         })
     }
     else
     {
-        needs.forEach(item =>
-            {
-                newCart.push(item);
-            })
+        newCart = needs
     }
     console.log("updating cart");
     localStorage.setItem('cart', JSON.stringify(newCart));
@@ -196,14 +199,14 @@ function storeEachIngredient(key, shouldStore)
     arrOfIngs.forEach(arr => 
     {
         let added = false;
-        const [ingKey, quant, unit, key] = arr;
+        const [ingKey, quant, unit, theKey] = arr;
         if (shouldStore) 
         {
             const quantAsNumber = parseFloat(quant);
             let newQuant = convertToGrams(unit, quantAsNumber);
             for (let i = 0; i < needs.length; i++)
             {
-                if (needs[i][0] == ingKey)
+                if (needs[i][0] == ingKey && needs[i][3] == key)
                 {
                     needs[i][1] += newQuant;
                     added = true;
@@ -228,21 +231,9 @@ function storeEachIngredient(key, shouldStore)
 function deleteIngsFromNeeds(ingKey, key)
 {
     const needs = JSON.parse(localStorage.getItem('needs')) || [];
-    let len = needs.length;
-    let newNeeds = [];
-    for (let i = 0; i < len; i++)
-            {
-                if (needs[i][0] == ingKey && needs[i][3] == key) //need more info so doesnt delete all w name
-                {
-                    //don't add
-                }
-                else
-                {
-                    newNeeds.push(needs[i]);
-                }
-            }
-            localStorage.setItem('needs', JSON.stringify(newNeeds));
-            //check to see if another recipie contains same key
+    const newNeeds = needs.filter(item => !(item[0] === ingKey && item[3] === key));
+    localStorage.setItem('needs', JSON.stringify(newNeeds));
+      //check to see if another recipie contains same key
 }
 
 function addToCartFunction(checkbox)
