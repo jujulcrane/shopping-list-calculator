@@ -49,11 +49,12 @@ function removeItem(id)
 
 function storeItem() 
 {
-    displayItem(itemInput.value, quantInput.value, unitsInput.value);
-    //convert quant to grams
     let convertedQuant = convertToGrams(unitsInput.value, quantInput.value)
-    saveItemToLocalStorage([itemInput.value, convertedQuant, "g"]);
-    updateCartWithStoredItem(itemInput.value, convertedQuant);
+    const success = saveItemToLocalStorage([itemInput.value.toLowerCase(), convertedQuant, "g"]);
+    if (!success) return;
+    displayItem(itemInput.value.toLowerCase(), quantInput.value, unitsInput.value);
+    //convert quant to grams
+    updateCartWithStoredItem(itemInput.value.toLowerCase(), convertedQuant);
     itemInput.value ="";
     quantInput.value="";
 }
@@ -152,8 +153,14 @@ function updateCart()
 function saveItemToLocalStorage(item) 
 {
     let items = JSON.parse(localStorage.getItem('items')) || [];
+    if (items.some(otherItem => otherItem[0] === item[0])) 
+    {
+        alert(`You've already added ${item[0]}! Delete it before readding.`);
+        return false;
+    }
     items.push(item);
     localStorage.setItem('items', JSON.stringify(items));
+    return true;
 }
 
 // Retrieve and render recipes from localStorage on page load

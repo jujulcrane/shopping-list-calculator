@@ -93,6 +93,7 @@ input[type="text"]::placeholder {
 
 #shelves p1
 {
+    white-space: nowrap;
     width: 10%;
 }
 

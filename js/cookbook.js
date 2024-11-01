@@ -330,6 +330,7 @@ function renderRecipe(recipe) {
     `);
 }
 
+//when clicking create
 function onSubmit(e)
 {
     e.preventDefault();
