@@ -4,14 +4,10 @@ const quantInput = document.querySelector('#add-quant');
 const addBut = document.querySelector('.add');
 const unitsInput = document.querySelector('#units');
 
-function getFirstWord(inputString) {
-    // Trim the string to remove any leading or trailing whitespace
+function getFirstWord(inputString) 
+{
     var trimmedString = inputString.trim();
-    
-    // Split the string by spaces
     var words = trimmedString.split(" ");
-    
-    // Return the first word
     return words[0];
 }
 
@@ -53,7 +49,6 @@ function storeItem()
     const success = saveItemToLocalStorage([itemInput.value.toLowerCase(), convertedQuant, "g"]);
     if (!success) return;
     displayItem(itemInput.value.toLowerCase(), quantInput.value, unitsInput.value);
-    //convert quant to grams
     updateCartWithStoredItem(itemInput.value.toLowerCase(), convertedQuant);
     itemInput.value ="";
     quantInput.value="";
@@ -64,26 +59,26 @@ function updateCartWithStoredItem(itemName, quantity)
     let needs = JSON.parse(localStorage.getItem('needs')) || [];
     let newCart = [];
     
-    // Loop through the current cart (needs) to adjust quantities
-    needs.forEach((item) => {
+    needs.forEach((item) => 
+    {
         let [cartName, cartQuant, cartUnit, key] = item;
         
-        // If the item from the fridge matches the cart item
-        if (cartName === itemName) {
-            cartQuant -= quantity; // Subtract the stored quantity
+        if (cartName === itemName) 
+        {
+            cartQuant -= quantity; 
             
-            if (cartQuant > 0) {
-                // If there's still some quantity needed, add to newCart
+            if (cartQuant > 0) 
+            {
                 newCart.push([cartName, cartQuant, cartUnit, key]);
             }
-        } else {
-            // If it doesn't match, keep the item in the cart
+        } else 
+        {
             newCart.push([cartName, cartQuant, cartUnit, key]);
         }
     });
-        // Save the updated cart back to localStorage
+        
         localStorage.setItem('cart', JSON.stringify(newCart));
-    
+
         console.log("Cart updated after storing item in fridge.");
  }
     
@@ -168,7 +163,6 @@ function loadItemsFromLocalStorage()
 {
     const items = JSON.parse(localStorage.getItem('items')) || [];
     items.forEach(item => {
-        // Populate the itemMap?
         // Render the item
         displayItem(item[0],item[1],item[2]);
     });
